@@ -30,6 +30,10 @@ ws.onmessage = function (msg) {
 };
 
 app.get("/txs", async (request, response) => {
+  response.send("IBC");
+});
+
+app.get("/txs", async (request, response) => {
   const domain = "http://ibc.umbrellavalidator.com:26657";
   const path = "/tx_search?query=%22tx.height%3E0%22";
   const txs = (await axios.get(domain + path)).data.result.txs;

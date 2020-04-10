@@ -1,11 +1,36 @@
 const express = require("express");
 const axios = require("axios");
 const app = express();
+const ReconnectingWebSocket = require("reconnecting-websocket");
 
 app.use(express.static("public"));
 
+const WebSocket = require("ws");
+let ws = new ReconnectingWebSocket(
+  "wss://ibc.umbrellavalidator.com:26657/websocket",
+  [],
+  {
+    WebSocket: WebSocket,
+  }
+);
+
+ws.onopen = function () {
+  ws.send(
+    JSON.stringify({
+      jsonrpc: "2.0",
+      method: "subscribe",
+      id: "1",
+      params: ["tm.event = 'Tx'"],
+    })
+  );
+};
+
+ws.onmessage = function (msg) {
+  console.log(msg);
+};
+
 app.get("/txs", async (request, response) => {
-  const domain = "http://goz.irisnet.org:26657";
+  const domain = "http://ibc.umbrellavalidator.com:26657";
   const path = "/tx_search?query=%22tx.height%3E0%22";
   const txs = (await axios.get(domain + path)).data.result.txs;
   let data = [];

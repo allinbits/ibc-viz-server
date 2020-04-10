@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "PORT=8080 nodemon index.js",
+    "dev": "PORT=8088 nodemon index.js",
     "start": "PORT=80 node index.js"
   },
   "keywords": [],
@@ -12,7 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.19.2",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "reconnecting-websocket": "^4.4.0",
+    "ws": "^7.2.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.3"

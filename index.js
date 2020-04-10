@@ -29,7 +29,7 @@ ws.onmessage = function (msg) {
   console.log(msg);
 };
 
-app.get("/txs", async (request, response) => {
+app.get("/", async (request, response) => {
   response.send("IBC");
 });
 

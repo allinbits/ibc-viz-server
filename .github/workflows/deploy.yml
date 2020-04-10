@@ -4,5 +4,9 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Echo test
-        run: echo $(date)
+      - name: SSH
+        uses: appleboy/ssh-action@master
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        script: git clone https://github.com/fadeev/ibcgraph

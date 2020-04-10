@@ -1,7 +1,8 @@
 on: [push]
 jobs:
-  name: Deploy
-  runs-on: ubuntu-latest
-  steps:
-    - name: Echo test
-      run: echo $(date)
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo test
+        run: echo $(date)

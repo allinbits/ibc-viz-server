@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "PORT=8088 nodemon index.js",
+    "dev": "PORT=80 nodemon index.js",
     "start": "PORT=80 node index.js"
   },
   "keywords": [],

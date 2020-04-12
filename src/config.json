@@ -1,4 +1,9 @@
 {
+  "db": {
+    "password": "postgres",
+    "user": "postgres",
+    "host": "postgres"
+  },
   "blockchains": [
     "95.217.135.90",
     "ibc01.dokia.cloud",

@@ -35,8 +35,14 @@ const fetchTxs = async () => {
           if (data && data.result) {
             data.result.txs.forEach((tx) => {
               client.query(
-                "insert into txs_encoded (id, tx, blockchain) values ($1, $2, $3) on conflict do nothing",
-                [tx.hash, tx.tx, domain]
+                "insert into txs_encoded (id, tx, blockchain, events, height) values ($1, $2, $3, $4, $5) on conflict do nothing",
+                [
+                  tx.hash,
+                  tx.tx,
+                  domain,
+                  { data: tx.tx_result.events },
+                  tx.height,
+                ]
               );
             });
             resolve(fetchTxsByPage(domain, page + 1));

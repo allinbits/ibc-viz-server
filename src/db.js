@@ -7,15 +7,15 @@ const axios = require("axios");
 
 let client;
 
+axios.defaults.timeout = 3000;
+
 const connect = () => {
-  return new Promise((resolve) => {
+  return new Promise(function executor(resolve) {
     client = new pg.Pool(config.db);
     client.connect((error) => {
       if (error) {
         console.log("DB connection failed. Retrying...");
-        setTimeout(() => {
-          connect();
-        }, 1000);
+        setTimeout(executor.bind(null, resolve), 1000);
       } else {
         console.log("DB connected.");
         resolve(client);
@@ -24,54 +24,87 @@ const connect = () => {
   });
 };
 
-const fetchTxs = () => {
-  const fetchTxsByPage = async (domain, page = 1) => {
-    const url = `http://${domain}:26657/tx_search?query=%22tx.height>0%22&per_page=100&page=${page}`;
-    console.log(`Fetching from ${domain} on page ${page}`);
-    const data = (await axios.get(url)).data;
-    if (data.result) {
-      data.result.txs.forEach((tx) => {
-        client.query(
-          "insert into txs_encoded (id, tx) values ($1, $2) on conflict do nothing",
-          [tx.hash, tx.tx]
-        );
-      });
-      fetchTxsByPage(domain, page + 1);
-    } else {
-      console.log(`Finished fetching from ${domain} on page ${page}`);
-    }
+const fetchTxs = async () => {
+  const fetchTxsByPage = (domain, page = 1) => {
+    return new Promise((resolve) => {
+      const url = `http://${domain}:26657/tx_search?query=%22tx.height>0%22&per_page=100&page=${page}`;
+      console.log(`Fetching from ${domain} on page ${page}`);
+      axios
+        .get(url)
+        .then(({ data }) => {
+          if (data && data.result) {
+            data.result.txs.forEach((tx) => {
+              client.query(
+                "insert into txs_encoded (id, tx, blockchain) values ($1, $2, $3) on conflict do nothing",
+                [tx.hash, tx.tx, domain]
+              );
+            });
+            resolve(fetchTxsByPage(domain, page + 1));
+          } else {
+            console.log(`Finished fetching from ${domain} on page ${page}`);
+            resolve(true);
+          }
+        })
+        .catch(() => {
+          console.log(`Completed fetching from ${domain} on page ${page}`);
+          resolve(true);
+        });
+    });
   };
-  config.blockchains.forEach((domain) => {
-    fetchTxsByPage(domain);
-  });
+  return Promise.all(
+    config.blockchains.map((domain) => {
+      return fetchTxsByPage(domain);
+    })
+  );
 };
 
 decodeTxs = async () => {
   const url = `http://${config.decoder}:1317/txs/decode`;
-  const txs = (await client.query("select * from txs_encoded;")).rows;
+  const txs = (
+    await client.query(
+      "select * from txs_encoded where decoding_failed is not true;"
+    )
+  ).rows;
   txs.forEach(async (tx) => {
     const query = `select exists(select 1 from txs where id = $1) as "exists"`;
     const exists = !!(await client.query(query, [tx.id])).rows[0].exists;
     if (!exists) {
       console.log(`Decoding transaction ${tx.id}`);
-      const decoded = (await axios.post(url, { tx: tx.tx })).data.result;
-      const query = `insert into txs (id, tx) values ($1, $2) on conflict do nothing`;
-      client.query(query, [tx.id, decoded]);
+      try {
+        let data = await axios.post(url, { tx: tx.tx });
+        if (data && data.data.result) {
+          console.log("Decoding succeeded!", tx.id);
+          const query = `insert into txs (id, tx, blockchain) values ($1, $2, $3) on conflict do nothing`;
+          client.query(query, [tx.id, data.data.result], tx.blockchain);
+        }
+      } catch (error) {
+        const err =
+          error &&
+          error.response &&
+          error.response.data &&
+          error.response.data.error;
+        if (err) {
+          console.log("Decoding failed!", tx.id);
+          client.query(
+            "update txs_encoded set decoding_failed = true where id = $1",
+            [tx.id]
+          );
+        }
+      }
     }
   });
 };
 
 module.exports = {
   init: async () => {
-    connect().then((cl) => {
-      client = cl;
-      client.query(init);
-      fetchTxs();
-      decodeTxs();
-    });
+    client = await connect();
+    client.query(init);
+    await fetchTxs();
+    decodeTxs();
   },
   query: (text, params, callback) => {
     return client.query(text, params, callback);
   },
   fetchTxs,
+  decodeTxs,
 };

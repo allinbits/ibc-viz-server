@@ -12,8 +12,9 @@ router.get("/txs/encoded", async (req, res) => {
 });
 
 router.get("/txs/fetch", async (req, res) => {
-  db.fetchTxs();
-  res.redirect(303, "/txs/encoded");
+  await db.fetchTxs();
+  db.decodeTxs();
+  res.redirect(303, "/txs");
 });
 
 router.get("/txs", async (req, res) => {

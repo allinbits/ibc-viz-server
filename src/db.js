@@ -75,7 +75,7 @@ decodeTxs = async () => {
         if (data && data.data.result) {
           console.log("Decoding succeeded!", tx.id);
           const query = `insert into txs (id, tx, blockchain) values ($1, $2, $3) on conflict do nothing`;
-          client.query(query, [tx.id, data.data.result], tx.blockchain);
+          client.query(query, [tx.id, data.data.result, tx.blockchain]);
         }
       } catch (error) {
         const err =

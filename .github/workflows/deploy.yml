@@ -14,5 +14,6 @@ jobs:
             git clone https://github.com/fadeev/ibcgraph ; \
             cd ibcgraph ; \
             git pull origin master ; \
+            rm -rf postgres-data ; \
             docker-compose down ; \
             docker-compose up -d

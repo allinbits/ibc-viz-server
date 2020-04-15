@@ -6,13 +6,13 @@ router.get("/", async (req, res) => {
   res.json({ api: "ok" });
 });
 
-router.get("/txs/encoded", async (req, res) => {
-  const data = (await db.query("select * from txs_encoded")).rows;
+router.get("/txs", async (req, res) => {
+  const data = (await db.query("select * from txs")).rows;
   res.json(data);
 });
 
 router.get("/txs/events/:type?", async (req, res) => {
-  const data = (await db.query("select * from txs_encoded")).rows;
+  const data = (await db.query("select * from txs")).rows;
   const type = req.params.type;
   let events = [];
   data.forEach((tx) => {
@@ -45,13 +45,7 @@ router.get("/txs/events/:type?", async (req, res) => {
 
 router.get("/txs/fetch", async (req, res) => {
   await db.fetchTxs();
-  db.decodeTxs();
   res.redirect(303, "/txs");
-});
-
-router.get("/txs", async (req, res) => {
-  const data = (await db.query("select * from txs")).rows;
-  res.json(data);
 });
 
 module.exports = router;

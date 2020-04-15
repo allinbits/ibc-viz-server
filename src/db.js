@@ -35,12 +35,12 @@ const fetchTxs = async () => {
           if (data && data.result) {
             data.result.txs.forEach((tx) => {
               client.query(
-                "insert into txs_encoded (id, tx, blockchain, events, height) values ($1, $2, $3, $4, $5) on conflict do nothing",
+                "insert into txs (hash, tx, blockchain, events, height) values ($1, $2, $3, $4, $5) on conflict do nothing",
                 [
                   tx.hash,
                   tx.tx,
                   domain,
-                  { data: tx.tx_result.events },
+                  {data: tx.tx_result.events},
                   tx.height,
                 ]
               );
@@ -64,53 +64,14 @@ const fetchTxs = async () => {
   );
 };
 
-decodeTxs = async () => {
-  const url = `http://${config.decoder}:1317/txs/decode`;
-  const txs = (
-    await client.query(
-      "select * from txs_encoded where decoding_failed is not true;"
-    )
-  ).rows;
-  txs.forEach(async (tx) => {
-    const query = `select exists(select 1 from txs where id = $1) as "exists"`;
-    const exists = !!(await client.query(query, [tx.id])).rows[0].exists;
-    if (!exists) {
-      console.log(`Decoding transaction ${tx.id}`);
-      try {
-        let data = await axios.post(url, { tx: tx.tx });
-        if (data && data.data.result) {
-          console.log("Decoding succeeded!", tx.id);
-          const query = `insert into txs (id, tx, blockchain) values ($1, $2, $3) on conflict do nothing`;
-          client.query(query, [tx.id, data.data.result, tx.blockchain]);
-        }
-      } catch (error) {
-        const err =
-          error &&
-          error.response &&
-          error.response.data &&
-          error.response.data.error;
-        if (err) {
-          console.log("Decoding failed!", tx.id);
-          client.query(
-            "update txs_encoded set decoding_failed = true where id = $1",
-            [tx.id]
-          );
-        }
-      }
-    }
-  });
-};
-
 module.exports = {
   init: async () => {
     client = await connect();
     client.query(init);
     await fetchTxs();
-    decodeTxs();
   },
   query: (text, params, callback) => {
     return client.query(text, params, callback);
   },
-  fetchTxs,
-  decodeTxs,
+  fetchTxs
 };

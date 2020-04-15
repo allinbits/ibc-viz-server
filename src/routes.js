@@ -30,7 +30,7 @@ router.get("/txs/events/:type?", async (req, res) => {
         attributes[key] = value;
       });
       events.push({
-        id: tx.id,
+        hash: tx.hash,
         blockchain: tx.blockchain,
         event_type: event.type,
         height: tx.height,

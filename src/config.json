@@ -6,7 +6,12 @@
   },
   "blockchains": [
     "goz.irisnet.org",
+    "achain.nodeateam.com",
+    "n01.gozlira.com",
     "ibc01.dokia.cloud",
+    "goz.dos.network",
+    "152.32.135.74",
+    "fridayco.in",
     "95.217.135.90",
     "ibc-testnet1.bandchain.org",
     "157.230.255.202",
@@ -14,10 +19,17 @@
     "gozmelea.mycryptobets.com",
     "ibc-alpha.desmos.network",
     "ibc.ping.pub",
+    "3.211.57.24",
+    "ibc.staking.fund",
+    "ibct01.newroad.network",
+    "13.231.12.191",
+    "ibc.westaking.io",
     "95.217.135.90",
+    "ibc.blockscape.network",
     "shitcoincasinos.com",
     "ibc.umbrellavalidator.com",
     "ibc1.vitwit.in",
-    "ibc.vitwit.in"
+    "ibc.vitwit.in",
+    "80.64.211.64"
   ]
 }

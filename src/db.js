@@ -34,15 +34,20 @@ const fetchTxs = async () => {
         .then(({ data }) => {
           if (data && data.result) {
             data.result.txs.forEach((tx) => {
+              let events = [];
+              tx.tx_result.events.forEach((ev) => {
+                let e = {};
+                e[ev.type] = ev.message;
+                ev.attributes.forEach((a) => {
+                  const key = Buffer.from(a.key, "base64").toString("utf-8");
+                  const val = Buffer.from(a.value, "base64").toString("utf-8");
+                  e[key] = val;
+                });
+                events.push(e);
+              });
               client.query(
                 "insert into txs (hash, tx, blockchain, events, height) values ($1, $2, $3, $4, $5) on conflict do nothing",
-                [
-                  tx.hash,
-                  tx.tx,
-                  domain,
-                  {data: tx.tx_result.events},
-                  tx.height,
-                ]
+                [tx.hash, tx.tx, domain, { events }, tx.height]
               );
             });
             resolve(fetchTxsByPage(domain, page + 1));
@@ -51,8 +56,10 @@ const fetchTxs = async () => {
             resolve(true);
           }
         })
-        .catch(() => {
-          console.log(`Completed fetching from ${domain} on page ${page}`);
+        .catch((error) => {
+          console.log(
+            `Error in fetching from ${domain} on page ${page}, ${error}`
+          );
           resolve(true);
         });
     });
@@ -69,9 +76,10 @@ module.exports = {
     client = await connect();
     client.query(init);
     await fetchTxs();
+    console.log("Finished fetching txs.");
   },
   query: (text, params, callback) => {
     return client.query(text, params, callback);
   },
-  fetchTxs
+  fetchTxs,
 };

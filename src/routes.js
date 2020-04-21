@@ -7,40 +7,17 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/txs", async (req, res) => {
-  const data = (await db.query("select * from txs")).rows;
+  const blockchain = req.query.blockchain;
+  let data;
+  if (blockchain) {
+    const query =
+      "select * from txs where blockchain = $1 order by height desc";
+    data = (await db.query(query, [blockchain])).rows;
+  } else {
+    const query = "select * from txs order by height desc";
+    data = (await db.query(query)).rows;
+  }
   res.json(data);
-});
-
-router.get("/txs/events/:type?", async (req, res) => {
-  const data = (await db.query("select * from txs")).rows;
-  const type = req.params.type;
-  let events = [];
-  data.forEach((tx) => {
-    tx.events.data.forEach((event) => {
-      let attributes = {};
-      event.attributes.forEach((a) => {
-        const key = Buffer.from(a.key, "base64").toString("utf-8");
-        const valueRaw = Buffer.from(a.value, "base64").toString("utf-8");
-        let value;
-        try {
-          value = JSON.parse(valueRaw);
-        } catch {
-          value = valueRaw;
-        }
-        attributes[key] = value;
-      });
-      events.push({
-        hash: tx.hash,
-        blockchain: tx.blockchain,
-        event_type: event.type,
-        height: tx.height,
-        ...attributes,
-      });
-    });
-  });
-  res.json(
-    type ? events.filter((e) => e.event_type === req.params.type) : events
-  );
 });
 
 router.get("/txs/fetch", async (req, res) => {

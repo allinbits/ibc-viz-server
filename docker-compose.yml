@@ -5,7 +5,7 @@ services:
     volumes:
       - .:/app:cached
     ports:
-      - 8081:8081
+      - 80:80
     working_dir: /app
     command: >
       sh -c "npm install && npm run dev"

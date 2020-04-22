@@ -46,8 +46,8 @@ const fetchTxs = async () => {
                 events.push(e);
               });
               client.query(
-                "insert into txs (hash, tx, blockchain, events, height) values ($1, $2, $3, $4, $5) on conflict do nothing",
-                [tx.hash, tx.tx, domain, { events }, tx.height]
+                "insert into txs (hash, blockchain, events, height) values ($1, $2, $3, $4) on conflict do nothing",
+                [tx.hash, domain, { events }, tx.height]
               );
             });
             resolve(fetchTxsByPage(domain, page + 1));

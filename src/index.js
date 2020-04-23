@@ -5,8 +5,9 @@ const app = express();
 const http = require("http").createServer(app);
 const db = require("./db");
 const routes = require("./routes");
+const io = require("socket.io")(http);
 
-db.init();
+db.init(io);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

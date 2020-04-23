@@ -31,4 +31,16 @@ router.get("/blockchains", async (req, res) => {
   res.json(data);
 });
 
+router.get("/health", async (req, res) => {
+  const blockchain = req.query.blockchain;
+  let data;
+  try {
+    data = (await axios.get(`http://${blockchain}:26657/health`)).data;
+    res.send(data);
+  } catch {
+    data = null;
+    res.sendStatus(404);
+  }
+});
+
 module.exports = router;

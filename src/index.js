@@ -2,7 +2,21 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
-const http = require("http").createServer(app);
+const fs = require("fs");
+
+let ssl;
+
+try {
+  ssl = {
+    key: fs.readFileSync("~/key"),
+    cert: fs.readFileSync("~/cert"),
+  };
+} catch {
+  ssl = {};
+}
+
+http = require("http").createServer(ssl, app);
+
 const db = require("./db");
 const routes = require("./routes");
 const io = require("socket.io")(http);

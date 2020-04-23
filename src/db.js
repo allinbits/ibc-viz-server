@@ -72,14 +72,14 @@ const fetchTxs = async () => {
 };
 
 module.exports = {
-  init: async (io) => {
+  init: async () => {
     client = await connect();
     client.query(init);
     await fetchTxs();
     console.log("Finished fetching txs.");
-    setInterval(() => {
-      io.emit("tx", { tx: "This is a tx!" });
-    }, 1000);
+    // setInterval(() => {
+    //   io.emit("tx", { tx: "This is a tx!" });
+    // }, 1000);
   },
   query: (text, params, callback) => {
     return client.query(text, params, callback);

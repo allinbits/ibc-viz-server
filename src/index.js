@@ -2,11 +2,24 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
-const http = require("http").createServer(app);
+const http = require("http");
+const https = require("https");
 const db = require("./db");
 const routes = require("./routes");
+const fs = require("fs");
+
+let ssl;
 
 db.init();
+
+try {
+  ssl = {
+    key: fs.readFileSync("key", "utf8"),
+    cert: fs.readFileSync("cert", "utf8"),
+  };
+} catch {
+  console.log("Key and certificate not found.");
+}
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -14,8 +27,11 @@ app.use(cors());
 
 app.use("/", routes);
 
-const port = process.env.PORT || 80;
+const httpServer = http.createServer(app);
 
-http.listen(port, () => {
-  console.log("Your app is listening on port " + port);
-});
+httpServer.listen(80);
+
+if (ssl) {
+  const httpsServer = https.createServer(ssl, app);
+  httpsServer.listen(443);
+}

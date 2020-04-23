@@ -12,6 +12,8 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           script: |
             git clone https://github.com/fadeev/ibcgraph ; \
+            cp key ibcgraph/ ; \
+            cp cert ibcgraph/ ; \
             cd ibcgraph ; \
             git pull origin master ; \
             rm -rf postgres-data ; \

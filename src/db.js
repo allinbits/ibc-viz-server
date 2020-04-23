@@ -4,10 +4,35 @@ const pg = require("pg");
 const config = require("./config.json");
 const init = fs.readFileSync(path.resolve(__dirname, "db.sql"), "utf8");
 const axios = require("axios");
+const ReconnectingWebSocket = require("reconnecting-websocket");
+const WebSocket = require("ws");
 
 let client;
 
 axios.defaults.timeout = 3000;
+
+const socketInit = (blockchains) => {
+  const subscribe = {
+    jsonrpc: "2.0",
+    method: "subscribe",
+    id: "1",
+    params: ["tm.event = 'Tx'"],
+  };
+  blockchains.forEach((domain) => {
+    let socket = new ReconnectingWebSocket(
+      `wss://${domain}:443/websocket`,
+      [],
+      { WebSocket }
+    );
+    socket.onopen = () => {
+      socket.send(JSON.stringify(subscribe));
+    };
+    socket.onmessage = async (msg) => {
+      let msgData = JSON.parse(msg.data);
+      console.log("Message from socket!");
+    };
+  });
+};
 
 const connect = () => {
   return new Promise(function executor(resolve) {
@@ -71,18 +96,27 @@ const fetchTxs = async () => {
   );
 };
 
+const fetchBlockchains = () => {
+  return client.query(`
+    select
+      count(txs.*)::int as txs_count,
+      txs.blockchain
+    from txs
+    group by blockchain
+  `);
+};
+
 module.exports = {
-  init: async (socket) => {
+  init: async (io) => {
     client = await connect();
     client.query(init);
+    socketInit(config.blockchains);
     await fetchTxs();
     console.log("Finished fetching txs.");
-    setInterval(() => {
-      socket.emit("tx", { tx: "This is a tx!" });
-    }, 1000);
   },
   query: (text, params, callback) => {
     return client.query(text, params, callback);
   },
   fetchTxs,
+  fetchBlockchains,
 };

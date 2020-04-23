@@ -7,10 +7,11 @@ const https = require("https");
 const db = require("./db");
 const routes = require("./routes");
 const fs = require("fs");
+const io = require("socket.io");
 
 let ssl;
-
-db.init();
+let httpServer;
+let httpsServer;
 
 try {
   ssl = {
@@ -27,11 +28,14 @@ app.use(cors());
 
 app.use("/", routes);
 
-const httpServer = http.createServer(app);
-
-httpServer.listen(80);
+httpServer = http.createServer(app);
 
 if (ssl) {
-  const httpsServer = https.createServer(ssl, app);
+  httpsServer = https.createServer(ssl, app);
+  db.init(io(httpsServer));
   httpsServer.listen(443);
+} else {
+  db.init(io(httpServer));
 }
+
+httpServer.listen(80);

@@ -31,6 +31,11 @@ router.get("/blockchains", async (req, res) => {
   res.json(data);
 });
 
+router.get("/transfers", async (req, res) => {
+  data = (await db.query("select * from transfers")).rows;
+  res.json(data);
+});
+
 router.get("/health", async (req, res) => {
   const blockchain = req.query.blockchain;
   let data;

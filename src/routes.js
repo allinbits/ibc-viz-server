@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("./db");
 const axios = require("axios");
+const _ = require("lodash");
 
 router.get("/", async (req, res) => {
   res.json({ api: "ok" });
@@ -33,6 +34,34 @@ router.get("/blockchains", async (req, res) => {
 
 router.get("/transfers", async (req, res) => {
   data = (await db.query("select * from transfers")).rows;
+  res.json(data);
+});
+
+router.get("/relations", async (req, res) => {
+  let data = {};
+  const txs = (await db.query("select * from txs")).rows;
+  txs.forEach((tx) => {
+    const e = tx.events.events;
+    if (_.find(e, "sender")) {
+      const sender = _.find(e, "sender").sender;
+      if (
+        _.find(e, { action: "sender" }) ||
+        _.find(e, { action: "create_client" }) ||
+        _.find(e, { action: "transfer" }) ||
+        _.find(e, { action: "connection_open_ack" }) ||
+        _.find(e, { action: "connection_open_confirm" }) ||
+        _.find(e, { action: "channel_open_confirm" }) ||
+        _.find(e, { action: "channel_open_try" }) ||
+        _.find(e, { action: "connection_open_try" }) ||
+        _.find(e, { action: "channel_open_init" }) ||
+        _.find(e, { action: "send" }) ||
+        _.find(e, { action: "channel_open_ack" }) ||
+        _.find(e, { action: "connection_open_init" })
+      ) {
+        data[sender] = tx.blockchain;
+      }
+    }
+  });
   res.json(data);
 });
 

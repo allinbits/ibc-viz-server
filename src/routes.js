@@ -49,6 +49,17 @@ router.get("/relations", async (req, res) => {
       if (ev.type === "message" && sender) {
         data[sender.val] = tx.blockchain;
       }
+      if (ev.type === "recv_packet") {
+        const packet_data = _.find(ev.attributes, { key: "packet_data" });
+        const addr = JSON.parse(packet_data.val).value.receiver;
+        data[addr] = tx.blockchain;
+        console.log(addr, tx.blockchain);
+      }
+      if (ev.type === "send_packet") {
+        const packet_data = _.find(ev.attributes, { key: "packet_data" });
+        const addr = JSON.parse(packet_data.val).value.sender;
+        data[addr] = tx.blockchain;
+      }
     });
   });
   res.json(data);

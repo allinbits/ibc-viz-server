@@ -30,9 +30,18 @@ const socketInit = (blockchains, io) => {
       socket.send(JSON.stringify(subscribe));
     };
     socket.onmessage = async (msg) => {
-      let msgData = JSON.parse(msg.data);
-      console.log("Message from socket!", msgData);
-      io.emit("tx", { tx: msgData, blockchain: domain });
+      const tx = JSON.parse(msg.data);
+      try {
+        const hash = tx.result.events["tx.hash"][0];
+        const events = processTxEvents(
+          tx.result.data.value.TxResult.result.events
+        );
+        const height = tx.result.data.value.TxResult.height;
+        insertTx(hash, events, domain, height);
+        io.emit("tx", { hash, events, domain, height });
+      } catch (error) {
+        console.log("Error in inserting tx from a socket connection.");
+      }
     };
   });
 };
@@ -52,69 +61,24 @@ const connect = () => {
   });
 };
 
-const insertTransfer = (
-  hash,
-  blockchain,
-  height,
-  amount,
-  denom,
-  sender,
-  recipient,
-  type
-) => {
-  const columns = `
-    hash, blockchain, height, amount, denom, sender, recipient, type
-  `;
-  const query = `
-    insert into transfers (${columns}) values ($1, $2, $3, $4, $5, $6, $7, $8) on conflict do nothing
-  `;
-  client.query(query, [
-    hash,
-    blockchain,
-    height,
-    amount,
-    denom,
-    sender,
-    recipient,
-    type,
-  ]);
+const processTxEvents = (events) => {
+  return events.map((ev) => {
+    e = {};
+    e.type = ev.type;
+    e.attributes = [];
+    ev.attributes.forEach((a) => {
+      const key = Buffer.from(a.key, "base64").toString("utf-8");
+      const val = Buffer.from(a.value, "base64").toString("utf-8");
+      e.attributes.push({ key, val });
+    });
+    return e;
+  });
 };
 
-const insertIbcTransfer = (tx, events, domain) => {
-  let packet = _.find(events, "packet_data");
-  packet = JSON.parse(packet.packet_data);
-  amount = packet.value.amount[0].amount;
-  denom = packet.value.amount[0].denom;
-  sender = packet.value.sender;
-  recipient = packet.value.receiver;
-  type = "ibc_transfer";
-  insertTransfer(
-    tx.hash,
-    domain,
-    tx.height,
-    amount,
-    denom,
-    sender,
-    recipient,
-    type
-  );
-};
-
-const insertSendTransfer = (tx, events, domain) => {
-  amount = parseInt(_.find(events, "amount").amount);
-  denom = null;
-  sender = _.find(events, "sender").sender;
-  recipient = _.find(events, "recipient").recipient;
-  type = "send";
-  insertTransfer(
-    tx.hash,
-    domain,
-    tx.height,
-    amount,
-    denom,
-    sender,
-    recipient,
-    type
+const insertTx = (hash, events, domain, height) => {
+  client.query(
+    "insert into txs (hash, blockchain, events, height) values ($1, $2, $3, $4) on conflict do nothing",
+    [hash, domain, { ...events }, height]
   );
 };
 
@@ -128,30 +92,8 @@ const fetchTxs = async () => {
         .then(({ data }) => {
           if (data && data.result) {
             data.result.txs.forEach((tx) => {
-              let events = [];
-              tx.tx_result.events.forEach((ev) => {
-                let e = {};
-                e[ev.type] = ev.message;
-                ev.attributes.forEach((a) => {
-                  const key = Buffer.from(a.key, "base64").toString("utf-8");
-                  const val = Buffer.from(a.value, "base64").toString("utf-8");
-                  e[key] = val;
-                });
-                events.push(e);
-              });
-              try {
-                if (_.find(events, { action: "transfer" })) {
-                  insertIbcTransfer(tx, events, domain);
-                } else if (_.find(events, { action: "send" })) {
-                  insertSendTransfer(tx, events, domain);
-                }
-              } catch (error) {
-                console.log("Failed to insert a transaction.", error);
-              }
-              client.query(
-                "insert into txs (hash, blockchain, events, height) values ($1, $2, $3, $4) on conflict do nothing",
-                [tx.hash, domain, { events }, tx.height]
-              );
+              const events = processTxEvents(tx.tx_result.events);
+              insertTx(tx.hash, events, domain, tx.height);
             });
             resolve(fetchTxsByPage(domain, page + 1));
           } else {
@@ -174,16 +116,6 @@ const fetchTxs = async () => {
   );
 };
 
-const fetchBlockchains = () => {
-  return client.query(`
-    select
-      count(txs.*)::int as txs_count,
-      txs.blockchain
-    from txs
-    group by blockchain
-  `);
-};
-
 module.exports = {
   init: async (io) => {
     client = await connect();
@@ -196,5 +128,4 @@ module.exports = {
     return client.query(text, params, callback);
   },
   fetchTxs,
-  fetchBlockchains,
 };

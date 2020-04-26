@@ -22,18 +22,20 @@ router.get("/txs", async (req, res) => {
   res.json(data);
 });
 
-router.get("/txs/fetch", async (req, res) => {
-  await db.fetchTxs();
-  res.redirect(303, "/txs");
-});
-
-router.get("/blockchains", async (req, res) => {
-  data = (await db.fetchBlockchains()).rows;
+router.get("/txs/ibc", async (req, res) => {
+  let data = [];
+  const txs = (await db.query("select * from txs")).rows;
+  txs.forEach((tx) => {
+    if (_.find(tx.events, { type: "send_packet" })) {
+      data.push(tx);
+    }
+  });
   res.json(data);
 });
 
-router.get("/transfers", async (req, res) => {
-  data = (await db.query("select * from transfers")).rows;
+router.get("/blockchains", async (req, res) => {
+  const txs = (await db.query("select * from txs")).rows;
+  const data = [...new Set(txs.map((tx) => tx.blockchain))];
   res.json(data);
 });
 
@@ -41,26 +43,13 @@ router.get("/relations", async (req, res) => {
   let data = {};
   const txs = (await db.query("select * from txs")).rows;
   txs.forEach((tx) => {
-    const e = tx.events.events;
-    if (_.find(e, "sender")) {
-      const sender = _.find(e, "sender").sender;
-      if (
-        _.find(e, { action: "sender" }) ||
-        _.find(e, { action: "create_client" }) ||
-        _.find(e, { action: "transfer" }) ||
-        _.find(e, { action: "connection_open_ack" }) ||
-        _.find(e, { action: "connection_open_confirm" }) ||
-        _.find(e, { action: "channel_open_confirm" }) ||
-        _.find(e, { action: "channel_open_try" }) ||
-        _.find(e, { action: "connection_open_try" }) ||
-        _.find(e, { action: "channel_open_init" }) ||
-        _.find(e, { action: "send" }) ||
-        _.find(e, { action: "channel_open_ack" }) ||
-        _.find(e, { action: "connection_open_init" })
-      ) {
-        data[sender] = tx.blockchain;
+    Object.keys(tx.events).forEach((i) => {
+      const ev = tx.events[i];
+      const sender = _.find(ev.attributes, { key: "sender" });
+      if (ev.type === "message" && sender) {
+        data[sender.val] = tx.blockchain;
       }
-    }
+    });
   });
   res.json(data);
 });

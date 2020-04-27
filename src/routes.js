@@ -25,10 +25,25 @@ router.get("/txs", async (req, res) => {
 router.get("/txs/ibc", async (req, res) => {
   let data = [];
   const txs = (await db.query("select * from txs")).rows;
+  // txs.forEach((tx) => {
+  //   if (_.find(tx.events, { type: "send_packet" })) {
+  //     data.push(tx);
+  //   }
+  // });
   txs.forEach((tx) => {
-    if (_.find(tx.events, { type: "send_packet" })) {
-      data.push(tx);
-    }
+    Object.keys(tx.events).forEach((i) => {
+      const ev = tx.events[i];
+      if (ev.type === "recv_packet") {
+        const packet_data = _.find(ev.attributes, { key: "packet_data" });
+        const addr = JSON.parse(packet_data.val).value.receiver;
+        data.push(tx);
+      }
+      if (ev.type === "send_packet") {
+        const packet_data = _.find(ev.attributes, { key: "packet_data" });
+        const addr = JSON.parse(packet_data.val).value.sender;
+        data.push(tx);
+      }
+    });
   });
   res.json(data);
 });
@@ -53,7 +68,6 @@ router.get("/relations", async (req, res) => {
         const packet_data = _.find(ev.attributes, { key: "packet_data" });
         const addr = JSON.parse(packet_data.val).value.receiver;
         data[addr] = tx.blockchain;
-        console.log(addr, tx.blockchain);
       }
       if (ev.type === "send_packet") {
         const packet_data = _.find(ev.attributes, { key: "packet_data" });
@@ -63,6 +77,29 @@ router.get("/relations", async (req, res) => {
     });
   });
   res.json(data);
+});
+
+router.get("/ranking", async (req, res) => {
+  let data = { crap: { incoming: 0, outgoing: 0, blockchain: "crap" } };
+  const txs = (await db.query("select * from txs")).rows;
+  txs.forEach((tx) => {
+    const empty = { outgoing: 0, incoming: 0, blockchain: tx.blockchain };
+    data[tx.blockchain] = data[tx.blockchain] || empty;
+    Object.keys(tx.events).forEach((i) => {
+      const ev = tx.events[i];
+      if (ev.type === "recv_packet") {
+        const packet_data = _.find(ev.attributes, { key: "packet_data" });
+        const addr = JSON.parse(packet_data.val).value.receiver;
+        data[tx.blockchain].incoming++;
+      }
+      if (ev.type === "send_packet") {
+        const packet_data = _.find(ev.attributes, { key: "packet_data" });
+        const addr = JSON.parse(packet_data.val).value.sender;
+        data[tx.blockchain].outgoing++;
+      }
+    });
+  });
+  res.json(Object.values(data));
 });
 
 router.get("/health", async (req, res) => {

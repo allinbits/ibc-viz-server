@@ -80,7 +80,7 @@ router.get("/relations", async (req, res) => {
 });
 
 router.get("/ranking", async (req, res) => {
-  let data = { crap: { incoming: 0, outgoing: 0, blockchain: "crap" } };
+  let data = {};
   const txs = (await db.query("select * from txs")).rows;
   txs.forEach((tx) => {
     const empty = { outgoing: 0, incoming: 0, blockchain: tx.blockchain };

@@ -62,7 +62,7 @@ router.get("/transfers/connections", async (req, res) => {
       if (pair in connections) {
         connections[pair]++;
       } else {
-        connections[pair] = 0;
+        connections[pair] = 1;
       }
     }
   });

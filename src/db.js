@@ -37,8 +37,13 @@ const socketInit = (blockchains, io) => {
           tx.result.data.value.TxResult.result.events
         );
         const height = tx.result.data.value.TxResult.height;
+        const transfer = processTransfer(hash, events, domain, height);
+        if (transfer.sender) {
+          console.log(transfer);
+          insertTransfer(transfer);
+          io.emit("tx", transfer);
+        }
         insertTx(hash, events, domain, height);
-        io.emit("tx", { hash, events, domain, height });
       } catch (error) {
         console.log("Error in inserting tx from a socket connection.");
       }
@@ -82,6 +87,57 @@ const insertTx = (hash, events, domain, height) => {
   );
 };
 
+const insertTransfer = (transfer) => {
+  const {
+    sender,
+    receiver,
+    amount,
+    denom,
+    type,
+    height,
+    blockchain,
+    hash,
+  } = transfer;
+  client.query(
+    "insert into transfers (hash, blockchain, height, sender, receiver, amount, denom, type) values ($1, $2, $3, $4, $5, $6, $7, $8) on conflict do nothing",
+    [hash, blockchain, height, sender, receiver, amount, denom, type]
+  );
+};
+
+const processTransfer = (hash, events, blockchain, height) => {
+  let sender;
+  let receiver;
+  let amount;
+  let denom;
+  let type;
+  Object.keys(events).forEach((i) => {
+    const ev = events[i];
+    if (ev.type === "recv_packet") {
+      const packet_data = _.find(ev.attributes, {
+        key: "packet_data",
+      });
+      const value = JSON.parse(packet_data.val).value;
+      receiver = value.receiver;
+      sender = value.sender;
+      amount = value.amount[0].amount;
+      denom = value.amount[0].denom;
+      type = "recv_packet";
+    }
+    if (ev.type === "send_packet") {
+      const packet_data = _.find(ev.attributes, {
+        key: "packet_data",
+      });
+      const value = JSON.parse(packet_data.val).value;
+      receiver = value.receiver;
+      sender = value.sender;
+      amount = value.amount[0].amount;
+      denom = value.amount[0].denom;
+      type = "send_packet";
+    }
+  });
+  return { hash, blockchain, height, sender, receiver, amount, denom, type };
+};
+
 const fetchTxs = async () => {
   const fetchTxsByPage = (domain, page = 1) => {
     return new Promise((resolve) => {
@@ -93,6 +149,15 @@ const fetchTxs = async () => {
           if (data && data.result) {
             data.result.txs.forEach((tx) => {
               const events = processTxEvents(tx.tx_result.events);
+              const transfer = processTransfer(
+                tx.hash,
+                events,
+                domain,
+                tx.height
+              );
+              if (transfer.sender) {
+                insertTransfer(transfer);
+              }
               insertTx(tx.hash, events, domain, tx.height);
             });
             resolve(fetchTxsByPage(domain, page + 1));

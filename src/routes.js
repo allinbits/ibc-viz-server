@@ -48,6 +48,32 @@ router.get("/txs/ibc", async (req, res) => {
   res.json(data);
 });
 
+router.get("/transfers", async (req, res) => {
+  const data = (await db.query("select * from transfers")).rows;
+  res.json(data);
+});
+
+router.get("/transfers/connections", async (req, res) => {
+  let connections = {};
+  const txs = (await db.query("select * from transfers")).rows;
+  txs.forEach((tx) => {
+    if (tx.type === "send_packet") {
+      const pair = `${tx.sender}-${tx.receiver}`;
+      if (pair in connections) {
+        connections[pair]++;
+      } else {
+        connections[pair] = 0;
+      }
+    }
+  });
+  connections = Object.keys(connections).map((pair) => {
+    const [sender, receiver] = pair.split("-");
+    const count = connections[pair];
+    return { sender, receiver, count };
+  });
+  res.json(connections);
+});
+
 router.get("/blockchains", async (req, res) => {
   const txs = (await db.query("select * from txs")).rows;
   const data = [...new Set(txs.map((tx) => tx.blockchain))];

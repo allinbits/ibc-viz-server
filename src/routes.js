@@ -26,11 +26,6 @@ router.get("/txs", async (req, res) => {
 router.get("/txs/ibc", async (req, res) => {
   let data = [];
   const txs = (await db.query("select * from txs")).rows;
-  // txs.forEach((tx) => {
-  //   if (_.find(tx.events, { type: "send_packet" })) {
-  //     data.push(tx);
-  //   }
-  // });
   txs.forEach((tx) => {
     Object.keys(tx.events).forEach((i) => {
       const ev = tx.events[i];

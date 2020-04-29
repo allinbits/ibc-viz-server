@@ -10,8 +10,6 @@ const _ = require("lodash");
 
 let client;
 
-axios.defaults.timeout = 3000;
-
 const socketInit = (blockchains, io) => {
   const subscribe = {
     jsonrpc: "2.0",

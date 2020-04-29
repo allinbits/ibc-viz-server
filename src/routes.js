@@ -90,23 +90,16 @@ router.get("/relations", async (req, res) => {
 
 router.get("/ranking", async (req, res) => {
   let data = {};
-  const txs = (await db.query("select * from txs")).rows;
+  const txs = (await db.query("select * from transfers")).rows;
   txs.forEach((tx) => {
     const empty = { outgoing: 0, incoming: 0, blockchain: tx.blockchain };
     data[tx.blockchain] = data[tx.blockchain] || empty;
-    Object.keys(tx.events).forEach((i) => {
-      const ev = tx.events[i];
-      if (ev.type === "recv_packet") {
-        const packet_data = _.find(ev.attributes, { key: "packet_data" });
-        const addr = JSON.parse(packet_data.val).value.receiver;
-        data[tx.blockchain].incoming++;
-      }
-      if (ev.type === "send_packet") {
-        const packet_data = _.find(ev.attributes, { key: "packet_data" });
-        const addr = JSON.parse(packet_data.val).value.sender;
-        data[tx.blockchain].outgoing++;
-      }
-    });
+    if (tx.type === "send_packet") {
+      data[tx.blockchain].outgoing++;
+    }
+    if (tx.type === "recv_packet") {
+      data[tx.blockchain].incoming++;
+    }
   });
   res.json(Object.values(data));
 });

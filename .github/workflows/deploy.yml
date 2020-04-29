@@ -9,13 +9,10 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.SSH_KEY }}
           script: |
-            git clone https://github.com/fadeev/ibcgraph ; \
-            cp key ibcgraph/ ; \
-            cp cert ibcgraph/ ; \
-            cd ibcgraph ; \
-            git pull origin master ; \
-            rm -rf postgres-data ; \
-            docker-compose down ; \
-            docker-compose up -d
+            cd ~/ibc-viz-server
+            git pull
+            docker-compose -f docker-compose.yml -f prod.yaml down
+            sudo rm -rf postgres-data
+            docker-compose -f docker-compose.yml -f prod.yaml up -d

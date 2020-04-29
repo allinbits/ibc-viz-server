@@ -14,5 +14,5 @@ jobs:
             cd ~/ibc-viz-server
             git pull
             docker-compose -f docker-compose.yml -f prod.yaml down
-            rm -rf postgres-data
+            sudo rm -rf postgres-data
             docker-compose -f docker-compose.yml -f prod.yaml up -d

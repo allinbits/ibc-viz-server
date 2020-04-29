@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("./db");
 const axios = require("axios");
 const _ = require("lodash");
+const config = require("./config.json");
 
 router.get("/", async (req, res) => {
   res.json({ api: "ok" });
@@ -75,9 +76,7 @@ router.get("/transfers/connections", async (req, res) => {
 });
 
 router.get("/blockchains", async (req, res) => {
-  const txs = (await db.query("select * from txs")).rows;
-  const data = [...new Set(txs.map((tx) => tx.blockchain))];
-  res.json(data);
+  res.json(config.blockchains);
 });
 
 router.get("/relations", async (req, res) => {

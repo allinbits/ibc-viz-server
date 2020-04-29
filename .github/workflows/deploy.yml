@@ -19,4 +19,4 @@ jobs:
             git pull
             docker-compose down
             sudo rm -rf postgres-data
-            docker-compose up -d
+            docker-compose up --build -d

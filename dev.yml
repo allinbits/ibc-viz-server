@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+
+  server:
+    image: node:latest
+    volumes:
+      - .:/app:cached
+    ports:
+      - 80:80
+      - 443:443
+    working_dir: /app
+    command: >
+      sh -c "npm install && npm run dev"

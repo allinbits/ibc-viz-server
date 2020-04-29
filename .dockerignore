@@ -1,0 +1,10 @@
+node_modules
+postgres-data
+.DS_Store
+*.yaml
+*.yml
+*.md
+.gitignore
+.github
+.git
+Dockerfile

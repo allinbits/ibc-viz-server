@@ -1,4 +1,8 @@
-on: [push]
+on:
+  push:
+    branches:
+      - master
+
 jobs:
   deploy:
     name: Deploy
@@ -13,6 +17,6 @@ jobs:
           script: |
             cd ~/ibc-viz-server
             git pull
-            docker-compose -f docker-compose.yml -f prod.yaml down
+            docker-compose down
             sudo rm -rf postgres-data
-            docker-compose -f docker-compose.yml -f prod.yaml up -d
+            docker-compose up -d

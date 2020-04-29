@@ -26,7 +26,7 @@ const socketInit = (blockchains, io) => {
       { WebSocket }
     );
     socket.onopen = () => {
-      console.log("open", domain);
+      // console.log("open", domain);
       socket.send(JSON.stringify(subscribe));
     };
     socket.onmessage = async (msg) => {
@@ -39,13 +39,12 @@ const socketInit = (blockchains, io) => {
         const height = tx.result.data.value.TxResult.height;
         const transfer = processTransfer(hash, events, domain, height);
         if (transfer.sender) {
-          console.log(transfer);
           insertTransfer(transfer);
           io.emit("tx", transfer);
         }
         insertTx(hash, events, domain, height);
       } catch (error) {
-        console.log("Error in inserting tx from a socket connection.");
+        // console.log("Error in inserting tx from a socket connection.");
       }
     };
   });
@@ -174,11 +173,9 @@ const fetchTxs = async () => {
         });
     });
   };
-  return Promise.all(
-    config.blockchains.map((domain) => {
-      return fetchTxsByPage(domain);
-    })
-  );
+  config.blockchains.forEach((domain) => {
+    fetchTxsByPage(domain);
+  });
 };
 
 module.exports = {
@@ -187,7 +184,6 @@ module.exports = {
     client.query(init);
     socketInit(config.blockchains, io);
     await fetchTxs();
-    console.log("Finished fetching txs.");
   },
   query: (text, params, callback) => {
     return client.query(text, params, callback);

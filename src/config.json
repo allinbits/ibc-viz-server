@@ -5,6 +5,8 @@
     "host": "postgres"
   },
   "blockchains": [
+    "gozmelea.mycryptobets.com",
+    "ibc.westaking.io",
     "goz.irisnet.org",
     "achain.nodeateam.com",
     "n01.gozlira.com",
@@ -16,14 +18,12 @@
     "ibc-testnet1.bandchain.org",
     "157.230.255.202",
     "ibc-alpha.kava.io",
-    "gozmelea.mycryptobets.com",
     "ibc-alpha.desmos.network",
     "ibc.ping.pub",
     "3.211.57.24",
     "ibc.staking.fund",
     "ibct01.newroad.network",
     "13.231.12.191",
-    "ibc.westaking.io",
     "95.217.135.90",
     "ibc.blockscape.network",
     "shitcoincasinos.com",

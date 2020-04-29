@@ -82,25 +82,14 @@ router.get("/blockchains", async (req, res) => {
 
 router.get("/relations", async (req, res) => {
   let data = {};
-  const txs = (await db.query("select * from txs")).rows;
+  const txs = (await db.query("select * from transfers")).rows;
   txs.forEach((tx) => {
-    Object.keys(tx.events).forEach((i) => {
-      const ev = tx.events[i];
-      const sender = _.find(ev.attributes, { key: "sender" });
-      if (ev.type === "message" && sender) {
-        data[sender.val] = tx.blockchain;
-      }
-      if (ev.type === "recv_packet") {
-        const packet_data = _.find(ev.attributes, { key: "packet_data" });
-        const addr = JSON.parse(packet_data.val).value.receiver;
-        data[addr] = tx.blockchain;
-      }
-      if (ev.type === "send_packet") {
-        const packet_data = _.find(ev.attributes, { key: "packet_data" });
-        const addr = JSON.parse(packet_data.val).value.sender;
-        data[addr] = tx.blockchain;
-      }
-    });
+    if (tx.type === "send_packet") {
+      data[tx.sender] = tx.blockchain;
+    }
+    if (tx.type === "recv_packet") {
+      data[tx.receiver] = tx.blockchain;
+    }
   });
   res.json(data);
 });

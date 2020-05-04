@@ -23,35 +23,22 @@ router.get("/txs", async (req, res) => {
   res.json(data);
 });
 
-router.get("/txs/ibc", async (req, res) => {
-  let data = [];
-  const txs = (await db.query("select * from txs")).rows;
-  txs.forEach((tx) => {
-    Object.keys(tx.events).forEach((i) => {
-      const ev = tx.events[i];
-      if (ev.type === "recv_packet") {
-        const packet_data = _.find(ev.attributes, { key: "packet_data" });
-        const addr = JSON.parse(packet_data.val).value.receiver;
-        data.push(tx);
-      }
-      if (ev.type === "send_packet") {
-        const packet_data = _.find(ev.attributes, { key: "packet_data" });
-        const addr = JSON.parse(packet_data.val).value.sender;
-        data.push(tx);
-      }
-    });
-  });
+router.get("/packets", async (req, res) => {
+  let data;
+  const blockchain = req.query.blockchain;
+  if (blockchain) {
+    const query = `select * from packets where blockchain = $1`;
+    data = (await db.query(query, [blockchain])).rows;
+  } else {
+    const query = `select * from packets`;
+    data = (await db.query(query)).rows;
+  }
   res.json(data);
 });
 
-router.get("/transfers", async (req, res) => {
-  const data = (await db.query("select * from transfers")).rows;
-  res.json(data);
-});
-
-router.get("/transfers/connections", async (req, res) => {
+router.get("/connections", async (req, res) => {
   let connections = {};
-  const txs = (await db.query("select * from transfers")).rows;
+  const txs = (await db.query("select * from packets")).rows;
   txs.forEach((tx) => {
     if (tx.type === "send_packet") {
       const pair = `${tx.sender}-${tx.receiver}`;
@@ -76,7 +63,7 @@ router.get("/blockchains", async (req, res) => {
 
 router.get("/relations", async (req, res) => {
   let data = {};
-  const txs = (await db.query("select * from transfers")).rows;
+  const txs = (await db.query("select * from packets")).rows;
   txs.forEach((tx) => {
     if (tx.type === "send_packet") {
       data[tx.sender] = tx.blockchain;
@@ -90,7 +77,7 @@ router.get("/relations", async (req, res) => {
 
 router.get("/ranking", async (req, res) => {
   let data = {};
-  const txs = (await db.query("select * from transfers")).rows;
+  const txs = (await db.query("select * from packets")).rows;
   txs.forEach((tx) => {
     const empty = { outgoing: 0, incoming: 0, blockchain: tx.blockchain };
     data[tx.blockchain] = data[tx.blockchain] || empty;
@@ -104,11 +91,91 @@ router.get("/ranking", async (req, res) => {
   res.json(Object.values(data));
 });
 
+router.get("/count", async (req, res) => {
+  let data = {};
+  data = (await db.query("select count(*) from txs")).rows;
+  res.json({ data });
+});
+
+router.get("/update_client", async (req, res) => {
+  let data = {};
+  const txs = (await db.query("select * from txs order by height desc")).rows;
+  txs.forEach((tx) => {
+    Object.values(tx.events).forEach((event) => {
+      event.attributes.forEach((attr) => {
+        if (attr.val === "update_client") {
+          if (data[tx.blockchain]) {
+            data[tx.blockchain].push(tx.height);
+          } else {
+            data[tx.blockchain] = [];
+          }
+        }
+      });
+    });
+  });
+  let response = {};
+  Object.keys(data).forEach((key) => {
+    const lastHeight = data[key][0];
+    response[key] = lastHeight;
+  });
+  res.json(response);
+});
+
+router.get("/counterparty_client_id", async (req, res) => {
+  let data = {};
+  const txs = (await db.query("select * from txs order by height desc")).rows;
+  txs.forEach((tx) => {
+    Object.values(tx.events).forEach((event) => {
+      event.attributes.forEach((attr) => {
+        if (attr.key === "counterparty_client_id") {
+          data[attr.val] = tx.blockchain;
+          // if (data[tx.blockchain]) {
+          //   data[tx.blockchain].push(attr.val);
+          // } else {
+          //   data[tx.blockchain] = [];
+          // }
+        }
+      });
+    });
+  });
+  // let response = {};
+  // Object.keys(data).forEach((key) => {
+  //   response[key] = [...new Set(data[key])];
+  // });
+  res.json(data);
+});
+
+router.get("/create_client", async (req, res) => {
+  let data = {};
+  const txs = (await db.query("select * from txs order by height desc")).rows;
+  txs.forEach((tx) => {
+    Object.values(tx.events).forEach((event) => {
+      if (event.type === "create_client") {
+        event.attributes.forEach((attr) => {
+          if (attr.key === "client_id") {
+            data[attr.val] = tx.blockchain;
+            // if (data[tx.blockchain]) {
+            //   data[tx.blockchain].push(attr.val);
+            // } else {
+            //   data[tx.blockchain] = [];
+            // }
+          }
+        });
+      }
+    });
+  });
+  // let response = {};
+  // Object.keys(data).forEach((key) => {
+  //   response[key] = [...new Set(data[key])];
+  // });
+  res.json(data);
+});
+
 router.get("/health", async (req, res) => {
   const blockchain = req.query.blockchain;
   let data;
   try {
-    data = (await axios.get(`http://${blockchain}:26657/health`)).data;
+    data = (await axios.get(`http://${blockchain}:26657/status`)).data;
     res.send(data);
   } catch {
     data = null;

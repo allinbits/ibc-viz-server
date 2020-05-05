@@ -45,15 +45,15 @@ const socketInit = (blockchains, io) => {
           tx.result.data.value.TxResult.result.events
         );
         const height = tx.result.data.value.TxResult.height;
-        events.forEach((event) => {
-          if (event.type === "send_packet") {
-            console.log(
-              objectifyPacket(
-                processPacket(hash, events, domain, height, "send_packet")
-              )
-            );
-          }
-        });
+        // events.forEach((event) => {
+        //   if (event.type === "send_packet") {
+        //     console.log(
+        //       objectifyPacket(
+        //         processPacket(hash, events, domain, height, "send_packet")
+        //       )
+        //     );
+        //   }
+        // });
         processTx(hash, events, domain, height);
         insertTx(hash, events, domain, height, "socket");
       } catch {

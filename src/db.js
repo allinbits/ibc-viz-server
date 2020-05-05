@@ -93,7 +93,6 @@ const processTxEvents = (events) => {
 };
 
 const insertTx = (hash, events, domain, height, source) => {
-  console.log("insertTx", hash, events, domain, height, source);
   const columns = "hash, blockchain, events, height, source";
   const values = "$1, $2, $3, $4, $5";
   const conflict = "conflict (hash) do update set source = 'search'";

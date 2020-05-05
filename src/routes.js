@@ -79,7 +79,7 @@ router.get("/ranking", async (req, res) => {
   let data = {};
   const txs = (await db.query("select * from packets")).rows;
   txs.forEach((tx) => {
-    const empty = { outgoing: 0, incoming: 0, blockchain: tx.blockchain };
+    const empty = { outgoing: 0, incoming: 0 };
     data[tx.blockchain] = data[tx.blockchain] || empty;
     if (tx.type === "send_packet") {
       data[tx.blockchain].outgoing++;
@@ -88,7 +88,7 @@ router.get("/ranking", async (req, res) => {
       data[tx.blockchain].incoming++;
     }
   });
-  res.json(Object.values(data));
+  res.json(data);
 });
 
 router.get("/count", async (req, res) => {
@@ -171,8 +171,9 @@ router.get("/create_client", async (req, res) => {
   res.json(data);
 });
 
-router.get("/health", async (req, res) => {
+router.get("/status", async (req, res) => {
   const blockchain = req.query.blockchain;
+  console.log("STATUS REQUEST");
   let data;
   try {
     data = (await axios.get(`http://${blockchain}:26657/status`)).data;

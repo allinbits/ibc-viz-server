@@ -386,7 +386,7 @@
       "node_addr": "regengoz.vaasl.io"
     },
     {
-      "chain-id": "responsible",
+      "chain_id": "responsible",
       "node_addr": "95.216.204.82"
     },
     {

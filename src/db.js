@@ -7,6 +7,7 @@ const ReconnectingWebSocket = require("reconnecting-websocket");
 const WebSocket = require("ws");
 const _ = require("lodash");
 const superagent = require("superagent");
+const axios = require("axios");
 
 let client;
 
@@ -176,18 +177,14 @@ const fetchTxs = async () => {
   const fetchTxsByPage = (domainWithPort, page = 0, height = 0) => {
     const [domain, port] = domainWithPort.split(":");
     return new Promise((resolve) => {
-      const url = `http://${domain}:${port}/tx_search?query=%22tx.height>${height}%22&per_page=100&page=${page}`;
+      const url = `http://${domain}:${port}/tx_search?query=%22tx.height>0%22&per_page=100&page=${page}`;
       console.log(
         `Fetching from ${domain} on page ${page} with height > ${height}`
       );
-      superagent
+      axios
         .get(url)
-        .timeout({
-          response: 10000,
-          deadline: 10000,
-        })
-        .then(({ res }) => {
-          const data = JSON.parse(res.text);
+        .then(({ data }) => {
+          // const data = JSON.parse(res.text);
           if (data && data.result) {
             try {
               data.result.txs.forEach((tx) => {

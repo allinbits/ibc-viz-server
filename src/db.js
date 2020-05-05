@@ -18,8 +18,8 @@ const socketInit = (blockchains, io) => {
     params: ["tm.event = 'Tx'"],
   };
   blockchains.forEach((b) => {
-    const domain = b.node_addr;
-    const url = `ws://${domain}:26657/websocket`;
+    const [domain, port] = b.node_addr.split(":");
+    const url = `ws://${domain}:${port}/websocket`;
     let socket = new ReconnectingWebSocket(url, [], { WebSocket });
     socket.onopen = () => {
       // console.log("open", domain);
@@ -45,15 +45,15 @@ const socketInit = (blockchains, io) => {
           tx.result.data.value.TxResult.result.events
         );
         const height = tx.result.data.value.TxResult.height;
-        // events.forEach((event) => {
-        //   if (event.type === "send_packet") {
-        //     console.log(
-        //       objectifyPacket(
-        //         processPacket(hash, events, domain, height, "send_packet")
-        //       )
-        //     );
-        //   }
-        // });
+        events.forEach((event) => {
+          if (event.type === "send_packet") {
+            console.log(
+              objectifyPacket(
+                processPacket(hash, events, domain, height, "send_packet")
+              )
+            );
+          }
+        });
         processTx(hash, events, domain, height);
         insertTx(hash, events, domain, height, "socket");
       } catch {
@@ -173,9 +173,10 @@ const processPacket = (hash, { attributes }, blockchain, height, type) => {
 };
 
 const fetchTxs = async () => {
-  const fetchTxsByPage = (domain, page = 0, height = 0) => {
+  const fetchTxsByPage = (domainWithPort, page = 0, height = 0) => {
+    const [domain, port] = domainWithPort.split(":");
     return new Promise((resolve) => {
-      const url = `http://${domain}:26657/tx_search?query=%22tx.height>${height}%22&per_page=100&page=${page}`;
+      const url = `http://${domain}:${port}/tx_search?query=%22tx.height>${height}%22&per_page=100&page=${page}`;
       console.log(
         `Fetching from ${domain} on page ${page} with height > ${height}`
       );

@@ -7,495 +7,499 @@
   "blockchains": [
     {
       "chain_id": "gozcosmoshub-1",
-      "node_addr": "35.233.155.199"
-    },
-    {
-      "chain_id": "Compass",
-      "node_addr": "goz.val.network"
-    },
-    {
-      "chain_id": "achain",
-      "node_addr": "achain.nodeateam.com"
-    },
-    {
-      "chain_id": "dropschain",
-      "node_addr": "dropschain.com"
-    },
-    {
-      "chain_id": "enigma-goz",
-      "node_addr": "val1.goz.enigma.co"
-    },
-    {
-      "chain_id": "seen",
-      "node_addr": "35.222.132.154"
-    },
-    {
-      "chain_id": "irishub-goz",
-      "node_addr": "35.236.168.104"
-    },
-    {
-      "chain_id": "microtick-ibc",
-      "node_addr": "45.79.207.112"
-    },
-    {
-      "chain_id": "universe",
-      "node_addr": "35.193.176.142"
-    },
-    {
-      "chain_id": "newroadchain",
-      "node_addr": "goz.newroad.network"
-    },
-    {
-      "chain_id": "rvc-1",
-      "node_addr": "rvc.novy.pw"
-    },
-    {
-      "chain_id": "SNZPoolHub",
-      "node_addr": "18.136.225.71"
-    },
-    {
-      "chain_id": "stakesstonechain",
-      "node_addr": "5.181.51.80"
-    },
-    {
-      "chain_id": "stakingfund",
-      "node_addr": "ibc.staking.fund"
-    },
-    {
-      "chain_id": "TaidiHub",
-      "node_addr": "13.250.207.24"
-    },
-    {
-      "chain_id": "dking",
-      "node_addr": "34.66.86.162"
-    },
-    {
-      "chain_id": "tom",
-      "node_addr": "47.245.35.172"
-    },
-    {
-      "chain_id": "Wetez",
-      "node_addr": "goz.wetez.io"
-    },
-    {
-      "chain_id": "agoric-goz-1.0.0",
-      "node_addr": "178.128.254.143"
-    },
-    {
-      "chain_id": "aib-goz-1",
-      "node_addr": "138.197.157.152"
-    },
-    {
-      "chain_id": "akashian",
-      "node_addr": "159.89.183.144"
-    },
-    {
-      "chain_id": "avnet",
-      "node_addr": "goz.cosmos.alphavirtual.com"
-    },
-    {
-      "chain_id": "aneka",
-      "node_addr": "goz.aneka.io"
-    },
-    {
-      "chain_id": "anon-chain",
-      "node_addr": "n1.anonstake"
-    },
-    {
-      "chain_id": "ape_smash",
-      "node_addr": "116.203.208.175"
-    },
-    {
-      "chain_id": "armyids",
-      "node_addr": "goz.armyids.com"
-    },
-    {
-      "chain_id": "atomic-bombers",
-      "node_addr": "bombers.dokia.cloud"
-    },
-    {
-      "chain_id": "audit.one",
-      "node_addr": "goz.audit.one"
-    },
-    {
-      "chain_id": "aynchain",
-      "node_addr": "52.247.127.40"
-    },
-    {
-      "chain_id": "BlogChain",
-      "node_addr": "blogchain.xyz"
-    },
-    {
-      "chain_id": "B-Harvest",
-      "node_addr": "ibc.bharvest.io"
-    },
-    {
-      "chain_id": "bitsong-goz-1",
-      "node_addr": "goz-1.bitsong.network"
-    },
-    {
-      "chain_id": "blockngine-ibc",
-      "node_addr": "rpc.blockngine.io"
-    },
-    {
-      "chain_id": "NoChainNoGain-1000",
-      "node_addr": "ibc.blockscape.network"
-    },
-    {
-      "chain_id": "brankochain",
-      "node_addr": "149.248.61.193"
-    },
-    {
-      "chain_id": "burek",
-      "node_addr": "95.216.198.111"
-    },
-    {
-      "chain_id": "byzantine-gos",
-      "node_addr": "178.128.186.74"
-    },
-    {
-      "chain_id": "capychain",
-      "node_addr": "capychain.com"
-    },
-    {
-      "chain_id": "cat",
-      "node_addr": "3.130.208.130"
-    },
-    {
-      "chain_id": "it-wasnt-us",
-      "node_addr": "wasntus.goz.certus.one"
+      "node_addr": "35.233.155.199:26657"
     },
     {
       "chain_id": "chainapsis-1a",
-      "node_addr": "goz.chainapsis.com"
+      "node_addr": "goz.chainapsis.com:80"
+    },
+    {
+      "chain_id": "achain",
+      "node_addr": "achain.nodeateam.com:26657"
+    },
+    {
+      "chain_id": "Compass",
+      "node_addr": "goz.val.network:26657"
+    },
+    {
+      "chain_id": "dropschain",
+      "node_addr": "dropschain.com:26657"
+    },
+    {
+      "chain_id": "enigma-goz",
+      "node_addr": "val1.goz.enigma.co:26657"
+    },
+    {
+      "chain_id": "seen",
+      "node_addr": "35.222.132.154:26657"
+    },
+    {
+      "chain_id": "irishub-goz",
+      "node_addr": "35.236.168.104:26657"
+    },
+    {
+      "chain_id": "microtick-ibc",
+      "node_addr": "45.79.207.112:26657"
+    },
+    {
+      "chain_id": "universe",
+      "node_addr": "35.193.176.142:26657"
+    },
+    {
+      "chain_id": "newroadchain",
+      "node_addr": "goz.newroad.network:26657"
+    },
+    {
+      "chain_id": "rvc-1",
+      "node_addr": "rvc.novy.pw:26657"
+    },
+    {
+      "chain_id": "SNZPoolHub",
+      "node_addr": "18.136.225.71:26657"
+    },
+    {
+      "chain_id": "stakesstonechain",
+      "node_addr": "5.181.51.80:26657"
+    },
+    {
+      "chain_id": "stakingfund",
+      "node_addr": "ibc.staking.fund:26657"
+    },
+    {
+      "chain_id": "TaidiHub",
+      "node_addr": "13.250.207.24:26657"
+    },
+    {
+      "chain_id": "dking",
+      "node_addr": "34.66.86.162:26657"
+    },
+    {
+      "chain_id": "tom",
+      "node_addr": "47.245.35.172:26657"
+    },
+    {
+      "chain_id": "Wetez",
+      "node_addr": "goz.wetez.io:26657"
+    },
+    {
+      "chain_id": "agoric-goz-1.0.0",
+      "node_addr": "178.128.254.143:26657"
+    },
+    {
+      "chain_id": "aib-goz-1",
+      "node_addr": "138.197.157.152:26657"
+    },
+    {
+      "chain_id": "akashian",
+      "node_addr": "159.89.183.144:26657"
+    },
+    {
+      "chain_id": "avnet",
+      "node_addr": "goz.cosmos.alphavirtual.com:26657"
+    },
+    {
+      "chain_id": "aneka",
+      "node_addr": "goz.aneka.io:26657"
+    },
+    {
+      "chain_id": "anon-chain",
+      "node_addr": "n1.anonstake:26657"
+    },
+    {
+      "chain_id": "ape_smash",
+      "node_addr": "116.203.208.175:26657"
+    },
+    {
+      "chain_id": "armyids",
+      "node_addr": "goz.armyids.com:26657"
+    },
+    {
+      "chain_id": "atomic-bombers",
+      "node_addr": "bombers.dokia.cloud:26657"
+    },
+    {
+      "chain_id": "audit.one",
+      "node_addr": "goz.audit.one:26657"
+    },
+    {
+      "chain_id": "aynchain",
+      "node_addr": "52.247.127.40:26657"
+    },
+    {
+      "chain_id": "BlogChain",
+      "node_addr": "blogchain.xyz:26657"
+    },
+    {
+      "chain_id": "B-Harvest",
+      "node_addr": "ibc.bharvest.io:26657"
+    },
+    {
+      "chain_id": "bitsong-goz-1",
+      "node_addr": "goz-1.bitsong.network:26657"
+    },
+    {
+      "chain_id": "blockngine-ibc",
+      "node_addr": "rpc.blockngine.io:26657"
+    },
+    {
+      "chain_id": "NoChainNoGain-1000",
+      "node_addr": "ibc.blockscape.network:26657"
+    },
+    {
+      "chain_id": "brankochain",
+      "node_addr": "149.248.61.193:26657"
+    },
+    {
+      "chain_id": "burek",
+      "node_addr": "95.216.198.111:26657"
+    },
+    {
+      "chain_id": "byzantine-gos",
+      "node_addr": "178.128.186.74:26657"
+    },
+    {
+      "chain_id": "capychain",
+      "node_addr": "capychain.com:26657"
+    },
+    {
+      "chain_id": "cat",
+      "node_addr": "3.130.208.130:26657"
+    },
+    {
+      "chain_id": "it-wasnt-us",
+      "node_addr": "wasntus.goz.certus.one:26657"
     },
     {
       "chain_id": "chainlayer",
-      "node_addr": "176.9.238.157"
+      "node_addr": "176.9.238.157:26657"
     },
     {
       "chain_id": "fedzone-1",
-      "node_addr": "fedzone.chorus.one"
+      "node_addr": "fedzone.chorus.one:26657"
     },
     {
       "chain_id": "coco-post-chain",
-      "node_addr": "ibc.cosmiccompass.io"
+      "node_addr": "ibc.cosmiccompass.io:26657"
     },
     {
       "chain_id": "cosmoon-testnet",
-      "node_addr": "ibc.cosmoon.org"
+      "node_addr": "ibc.cosmoon.org:26657"
     },
     {
       "chain_id": "crazyzoo",
-      "node_addr": "47.240.29.196"
+      "node_addr": "47.240.29.196:26657"
     },
     {
       "chain_id": "dawnsworld",
-      "node_addr": "testnet.dawns.world"
+      "node_addr": "testnet.dawns.world:26657"
     },
     {
       "chain_id": "dcz",
-      "node_addr": "goz.dev.datachain.jp"
+      "node_addr": "goz.dev.datachain.jp:26657"
     },
     {
       "chain_id": "defending-network",
-      "node_addr": "ibc.defending.network"
+      "node_addr": "ibc.defending.network:26657"
     },
     {
       "chain_id": "morpheus-goz",
-      "node_addr": "goz.desmos.network"
+      "node_addr": "goz.desmos.network:80"
     },
     {
       "chain_id": "disraptorchain",
-      "node_addr": "3.21.156.79"
+      "node_addr": "3.21.156.79:26657"
     },
     {
       "chain_id": "dos-ibc",
-      "node_addr": "goz.dos.network"
+      "node_addr": "goz.dos.network:26657"
     },
     {
       "chain_id": "dunhillchain",
-      "node_addr": "52.231.28.219"
+      "node_addr": "52.231.28.219:26657"
     },
     {
       "chain_id": "everstakechain",
-      "node_addr": "goz.everstake.one"
+      "node_addr": "goz.everstake.one:26657"
     },
     {
       "chain_id": "EVM.Protofire.io",
-      "node_addr": "3.22.194.241"
+      "node_addr": "3.22.194.241:26657"
     },
     {
       "chain_id": "stateset",
-      "node_addr": "35.209.174.13"
+      "node_addr": "35.209.174.13:26657"
     },
     {
       "chain_id": "ublochain",
-      "node_addr": "15.236.69.21"
+      "node_addr": "15.236.69.21:26657"
     },
     {
       "chain_id": "fetchBeacon",
-      "node_addr": "fetch-goz.fetch.ai"
+      "node_addr": "fetch-goz.fetch.ai:26657"
     },
     {
       "chain_id": "figment",
-      "node_addr": "goz-ibc.figment.network"
+      "node_addr": "goz-ibc.figment.network:26657"
     },
     {
       "chain_id": "finalbattlechain",
-      "node_addr": "18.217.240.174"
+      "node_addr": "18.217.240.174:26657"
     },
     {
       "chain_id": "freeflix-media-hub",
-      "node_addr": "ibc.freeflix.media"
+      "node_addr": "ibc.freeflix.media:26657"
     },
     {
       "chain_id": "gemstone",
-      "node_addr": "goz.jptpool.com"
+      "node_addr": "goz.jptpool.com:26657"
     },
     {
       "chain_id": "genesis-lab",
-      "node_addr": "95.216.216.117"
+      "node_addr": "95.216.216.117:26657"
     },
     {
       "chain_id": "grbx-route",
-      "node_addr": "176.9.8.110"
+      "node_addr": "176.9.8.110:26657"
     },
     {
       "chain_id": "gunchain",
-      "node_addr": "goz.gunray.xyz"
+      "node_addr": "goz.gunray.xyz:26657"
     },
     {
       "chain_id": "hada",
-      "node_addr": "15.165.120.204"
+      "node_addr": "15.165.120.204:26657"
     },
     {
       "chain_id": "hashquarkchain",
-      "node_addr": "goz.hashquark.io"
+      "node_addr": "goz.hashquark.io:26657"
     },
     {
       "chain_id": "hongo-3",
-      "node_addr": "18.178.211.15"
+      "node_addr": "18.178.211.15:26657"
     },
     {
       "chain_id": "interstation",
-      "node_addr": "interstation.cosmostation.io"
+      "node_addr": "interstation.cosmostation.io:26657"
     },
     {
       "chain_id": "isillienchain",
-      "node_addr": "49.12.106.6"
+      "node_addr": "49.12.106.6:26657"
     },
     {
       "chain_id": "joon-chain-goz",
-      "node_addr": "joon-chain-goz.cosmostation.io"
+      "node_addr": "joon-chain-goz.cosmostation.io:26657"
     },
     {
       "chain_id": "js",
-      "node_addr": "54.211.26.151"
+      "node_addr": "54.211.26.151:26657"
     },
     {
       "chain_id": "jtbchain",
-      "node_addr": "213.32.70.133"
+      "node_addr": "213.32.70.133:26657"
     },
     {
       "chain_id": "kira-1",
-      "node_addr": "goz.kiraex.com"
+      "node_addr": "goz.kiraex.com:10001"
     },
     {
       "chain_id": "konstellation",
-      "node_addr": "goz.konstellation.tech"
+      "node_addr": "goz.konstellation.tech:26657"
     },
     {
       "chain_id": "kugs-030",
-      "node_addr": "goz.labeleet.com"
+      "node_addr": "goz.labeleet.com:26657"
     },
     {
       "chain_id": "meeseeks",
-      "node_addr": "validating.for.co.ke"
+      "node_addr": "validating.for.co.ke:26657"
     },
     {
       "chain_id": "melea-111",
-      "node_addr": "melea.xyz"
+      "node_addr": "melea.xyz:26657"
     },
     {
       "chain_id": "mintonium",
-      "node_addr": "45.77.91.232"
+      "node_addr": "45.77.91.232:26657"
     },
     {
       "chain_id": "mmmh-lazy",
-      "node_addr": "mmmh.sytes.net"
+      "node_addr": "mmmh.sytes.net:26657"
     },
     {
       "chain_id": "modulus-goz-1",
-      "node_addr": "goz.modulus.network"
+      "node_addr": "goz.modulus.network:26657"
     },
     {
       "chain_id": "muzamint",
-      "node_addr": "muzamint.com/"
+      "node_addr": "muzamint.com:26657/"
     },
     {
       "chain_id": "nibiru-ibc",
-      "node_addr": "goz.nibiru.network"
+      "node_addr": "goz.nibiru.network:26657"
     },
     {
       "chain_id": "Node123",
-      "node_addr": "193.30.121.61"
+      "node_addr": "193.30.121.61:26657"
     },
     {
       "chain_id": "nodeasy",
-      "node_addr": "144.76.118.133"
+      "node_addr": "144.76.118.133:26657"
     },
     {
       "chain_id": "okchain",
-      "node_addr": "3.112.29.150"
+      "node_addr": "3.112.29.150:26657"
     },
     {
       "chain_id": "outpost",
-      "node_addr": "goz.kysenpool.io"
+      "node_addr": "goz.kysenpool.io:26657"
     },
     {
       "chain_id": "ozone",
-      "node_addr": "goz.ozonechain.xyz"
+      "node_addr": "goz.ozonechain.xyz:26657"
     },
     {
       "chain_id": "p2p-org-1",
-      "node_addr": "p2p-org-1.goz.p2p.org"
+      "node_addr": "p2p-org-1.goz.p2p.org:26657"
     },
     {
       "chain_id": "persistence",
-      "node_addr": "relayer.persistence.one"
+      "node_addr": "relayer.persistence.one:26657"
     },
     {
       "chain_id": "petomhub",
-      "node_addr": "goz.cyphercore.io"
+      "node_addr": "goz.cyphercore.io:26657"
     },
     {
       "chain_id": "plex",
-      "node_addr": "ibc.j96.me"
+      "node_addr": "ibc.j96.me:26657"
     },
     {
       "chain_id": "Protofire.io",
-      "node_addr": "3.134.115.80"
+      "node_addr": "3.134.115.80:26657"
     },
     {
       "chain_id": "pupu",
-      "node_addr": "35.230.42.221"
+      "node_addr": "35.230.42.221:26657"
+    },
+    {
+      "chain_id": "pylonschain",
+      "node_addr": "node.pylons.tech:26657"
     },
     {
       "chain_id": "regengoz",
-      "node_addr": "regengoz.vaasl.io"
+      "node_addr": "regengoz.vaasl.io:26657"
     },
     {
       "chain_id": "responsible",
-      "node_addr": "95.216.204.82"
+      "node_addr": "95.216.204.82:26657"
     },
     {
       "chain_id": "retz80chain",
-      "node_addr": "tnet-csg.c9ret.xyz"
+      "node_addr": "tnet-csg.c9ret.xyz:26657"
     },
     {
       "chain_id": "sentinel-goz",
-      "node_addr": "one.goz.sentinel.co"
+      "node_addr": "one.goz.sentinel.co:26657"
     },
     {
       "chain_id": "setanchain",
-      "node_addr": "setan.ml"
+      "node_addr": "setan.ml:26657"
     },
     {
       "chain_id": "simplystaking",
-      "node_addr": "80.64.211.64"
+      "node_addr": "80.64.211.64:26657"
     },
     {
       "chain_id": "snakey",
-      "node_addr": "ananas.alpe1.net"
+      "node_addr": "ananas.alpe1.net:26657"
     },
     {
       "chain_id": "source-xgoz",
-      "node_addr": "goz.source.network"
+      "node_addr": "goz.source.network:26657"
     },
     {
       "chain_id": "stake-capital",
-      "node_addr": "goz.stakedao.org"
+      "node_addr": "goz.stakedao.org:26657"
     },
     {
       "chain_id": "nuube-goz",
-      "node_addr": "ibc.stake.sh"
+      "node_addr": "ibc.stake.sh:26657"
     },
     {
       "chain_id": "stakebird-1",
-      "node_addr": "goz.stakebird.com"
+      "node_addr": "goz.stakebird.com:26657"
     },
     {
       "chain_id": "staked-ibc",
-      "node_addr": "ibc.staked.cloud"
+      "node_addr": "ibc.staked.cloud:26657"
     },
     {
       "chain_id": "jellyfish",
-      "node_addr": "goz.cosmos.fish"
+      "node_addr": "goz.cosmos.fish:26657"
     },
     {
       "chain_id": "stakematic",
-      "node_addr": "35.198.125.128"
+      "node_addr": "35.198.125.128:26657"
     },
     {
       "chain_id": "stakewolf",
-      "node_addr": "stakewolf.com"
+      "node_addr": "stakewolf.com:26657"
     },
     {
       "chain_id": "szchain",
-      "node_addr": "goz2.stake.zone"
+      "node_addr": "goz2.stake.zone:26657"
     },
     {
       "chain_id": "stakin",
-      "node_addr": "161.35.45.178"
+      "node_addr": "161.35.45.178:26657"
     },
     {
       "chain_id": "starcluster-1337",
-      "node_addr": "goz.starcluster.tech"
+      "node_addr": "goz.starcluster.tech:26657"
     },
     {
       "chain_id": "stoner",
-      "node_addr": "157.230.75.134"
+      "node_addr": "157.230.75.134:26657"
     },
     {
       "chain_id": "stardust-1111",
-      "node_addr": "stratus.mycryptobets.com"
+      "node_addr": "stratus.mycryptobets.com:26657"
     },
     {
       "chain_id": "thetechtrap-goz",
-      "node_addr": "thetechtrap.com"
+      "node_addr": "thetechtrap.com:26657"
     },
     {
       "chain_id": "timetowinchain",
-      "node_addr": "3.22.166.56"
+      "node_addr": "3.22.166.56:26657"
     },
     {
       "chain_id": "umbrella",
-      "node_addr": "goz.umbrellavalidator.com"
+      "node_addr": "goz.umbrellavalidator.com:26657"
     },
     {
       "chain_id": "vbstreetz",
-      "node_addr": "144.202.100.245"
+      "node_addr": "144.202.100.245:26657"
     },
     {
       "chain_id": "vgng-1",
-      "node_addr": "ibc.vgng.io"
+      "node_addr": "ibc.vgng.io:26657"
     },
     {
       "chain_id": "vipnamai",
-      "node_addr": "173.249.12.108"
+      "node_addr": "173.249.12.108:26657"
     },
     {
       "chain_id": "vostok-1",
-      "node_addr": "chain.exchange-fees.com"
+      "node_addr": "chain.exchange-fees.com:26657"
     },
     {
       "chain_id": "westaking",
-      "node_addr": "ibc.westaking.io"
+      "node_addr": "ibc.westaking.io:26657"
     },
     {
       "chain_id": "zilotchain",
-      "node_addr": "3.21.169.1"
+      "node_addr": "3.21.169.1:26657"
     }
   ]
 }

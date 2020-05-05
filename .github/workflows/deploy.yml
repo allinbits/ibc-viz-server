@@ -18,4 +18,5 @@ jobs:
             cd ~/ibc-viz-server
             git pull
             docker-compose down
+            rm -rf postgres-data
             docker-compose up --build -d

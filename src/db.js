@@ -197,7 +197,7 @@ const fetchTxs = async () => {
             } catch (error) {
               console.log("Some error.", error);
             }
-            resolve(fetchTxsByPage(domain, page + 1, height));
+            resolve(fetchTxsByPage(domainWithPort, page + 1, height));
           } else {
             console.log(`Finished fetching from ${domain} on page ${page}`);
             resolve(true);

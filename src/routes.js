@@ -92,7 +92,6 @@ router.get("/ranking", async (req, res) => {
 });
 
 router.get("/count", async (req, res) => {
-  let data = {};
   data = (await db.query("select count(*) from txs")).rows;
   res.json({ data });
 });

@@ -214,8 +214,9 @@ const fetchTxs = async () => {
   return Promise.all(
     config.blockchains.map(async (b) => {
       const domain = b.node_addr;
+      const blockchain = b.node_addr.split(":")[0];
       const query = `select * from txs where blockchain = $1 and source = 'search' order by height desc limit 1`;
-      const latestTx = (await client.query(query, [domain])).rows[0];
+      const latestTx = (await client.query(query, [blockchain])).rows[0];
       const height = latestTx ? latestTx.height : 0;
       return fetchTxsByPage(domain, 1, height);
     })

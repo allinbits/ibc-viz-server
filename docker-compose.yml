@@ -11,7 +11,7 @@ services:
     command: >
       sh -c "npm install && npm run dev"
   postgres:
-    image: postgres:latest
+    image: postgres:12
     volumes:
       - ./postgres-data:/var/lib/postgresql/data:cached
     ports:

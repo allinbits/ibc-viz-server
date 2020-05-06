@@ -2,7 +2,6 @@ on:
   push:
     branches:
       - master
-
 jobs:
   deploy:
     name: Deploy
@@ -19,4 +18,4 @@ jobs:
             git pull
             docker-compose down
             rm -rf postgres-data
-            docker-compose up --build -d
+            docker-compose up -d

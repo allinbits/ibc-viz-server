@@ -10,11 +10,3 @@ services:
     working_dir: /app
     command: >
       sh -c "npm install && npm run dev"
-  postgres:
-    image: postgres:12
-    volumes:
-      - ./postgres-data:/var/lib/postgresql/data:cached
-    ports:
-      - 5432:5432
-    environment:
-      POSTGRES_PASSWORD: postgres

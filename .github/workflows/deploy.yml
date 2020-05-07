@@ -10,11 +10,14 @@ jobs:
       - name: SSH
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
+          host: ${{ secrets.HOST_DO }}
+          username: ${{ secrets.USERNAME_DO }}
+          key: ${{ secrets.PASSWORD_DO }}
           script: |
-            cd ~/ibc-viz-server
-            git pull
-            docker-compose down
+            git clone https://github.com/allinbits/ibc-viz-server ; \
+            cp key ibc-viz-server/ ; \
+            cp cert ibc-viz-server/ ; \
+            cd ibc-viz-server ; \
+            git pull origin master ; \
+            docker-compose down ; \
             docker-compose up -d

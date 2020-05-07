@@ -1,9 +1,4 @@
 {
-  "db": {
-    "password": "postgres",
-    "user": "postgres",
-    "host": "postgres"
-  },
   "blockchains": [
     {
       "chain_id": "gozcosmoshub-1",

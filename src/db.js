@@ -18,7 +18,7 @@ const socketInit = (blockchains, io) => {
     };
     socket.onmessage = async (msg) => {
       const tx = JSON.parse(msg.data);
-      io.emit("tx", tx);
+      io.emit("tx", { ...tx, blockchain: domain });
     };
   });
 };

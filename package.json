@@ -16,7 +16,6 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "lodash": "^4.17.15",
-    "pg": "^8.0.2",
     "reconnecting-websocket": "^4.4.0",
     "socket.io": "^2.3.0",
     "superagent": "^5.2.2",

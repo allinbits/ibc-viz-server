@@ -15,7 +15,7 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "reconnecting-websocket": "^4.4.0",
     "socket.io": "^2.3.0",
     "superagent": "^5.2.2",
